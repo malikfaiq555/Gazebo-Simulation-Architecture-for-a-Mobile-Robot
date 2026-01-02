@@ -18,28 +18,28 @@ This repository contains a ROS 2 (Humble) simulation architecture built on Gazeb
 flowchart LR
   subgraph GZ["Gazebo Harmonic (gz-sim)"]
     direction TB
-    W["Worlds (SDF)\nEmpty · Corridor · Obstacles"]
-    R["Robot Model (URDF)\nDiffDrive system plugin"]
-    S["Sensors\nLiDAR (/scan)\nCamera (/camera/image_raw)"]
-    O["Odometry + Clock\n/odom · /clock"]
+    W["Worlds (SDF)<br/>Empty · Corridor · Obstacles"]
+    R["Robot Model (URDF)<br/>DiffDrive system plugin"]
+    S["Sensors<br/>LiDAR (/scan)<br/>Camera (/camera/image_raw)"]
+    O["Odometry + Clock<br/>/odom · /clock"]
     W --> R --> S
     R --> O
   end
 
-  B["ros_gz_bridge\n(single instance)\nGZ ↔ ROS topics"]
+  B["ros_gz_bridge<br/>(single instance)<br/>GZ ↔ ROS topics"]
 
   subgraph ROS["ROS 2 Humble"]
     direction TB
-    TF["State & TF\nrobot_state_publisher\nodom → TF"]
-    NAV["Navigation Logic\ngoal_nav_avoid\n(~0.18–0.20 m/s)"]
-    RV["RViz\nRobotModel · TF · Camera"]
+    TF["State & TF<br/>robot_state_publisher<br/>odom → TF"]
+    NAV["Navigation Logic<br/>goal_nav_avoid<br/>(~0.18–0.20 m/s)"]
+    RV["RViz<br/>RobotModel · TF · Camera"]
     TF --> RV
     NAV --> C["/cmd_vel"]
   end
 
   subgraph VAL["Validation & Delivery"]
-    T["Metrics & Testing\nhz checks · rosbag replay"]
-    G["GitHub Repo\ncode · PDF · demo video"]
+    T["Metrics & Testing<br/>hz checks · rosbag replay"]
+    G["GitHub Repo<br/>code · PDF · demo video"]
     T --> G
   end
 
@@ -47,6 +47,7 @@ flowchart LR
   O --> B --> TF
   C --> B --> R
   ROS --> VAL
+
 ````
 
 ---
