@@ -1,0 +1,78 @@
+Panels:
+  - Class: rviz_common/Displays
+    Name: Displays
+  - Class: rviz_common/Selection
+    Name: Selection
+  - Class: rviz_common/Tool Properties
+    Name: Tool Properties
+  - Class: rviz_common/Views
+    Name: Views
+Visualization Manager:
+  Class: ""
+  Enabled: true
+  Global Options:
+    Fixed Frame: odom
+    Frame Rate: 30
+  Displays:
+    - Class: rviz_default_plugins/Grid
+      Enabled: true
+      Name: Grid
+      Plane: XY
+      Cell Size: 1
+      Plane Cell Count: 20
+
+    - Class: rviz_default_plugins/TF
+      Enabled: true
+      Name: TF
+      Show Names: false
+      Show Axes: true
+      Show Arrows: true
+
+    - Class: rviz_default_plugins/RobotModel
+      Enabled: true
+      Name: RobotModel
+      
+      Description Topic: robot_description
+
+    - Class: rviz_default_plugins/LaserScan
+      Enabled: true
+      Name: LaserScan
+      Topic: /scan
+      Queue Size: 10
+      Size (m): 0.03
+      Style: Points
+
+    - Class: rviz_default_plugins/Odometry
+      Enabled: true
+      Name: Odometry
+      Topic: /odom
+      Keep: 200
+      Shape: Arrow
+
+    - Class: rviz_default_plugins/Image
+      Enabled: true
+      Name: Camera
+      Topic: /camera/image_raw
+      Transport Hint: raw
+      Queue Size: 2
+      Normalize Range: true
+
+  Tools:
+    - Class: rviz_default_plugins/Interact
+    - Class: rviz_default_plugins/MoveCamera
+    - Class: rviz_default_plugins/Select
+    - Class: rviz_default_plugins/FocusCamera
+    - Class: rviz_default_plugins/Measure
+  Views:
+    Current:
+      Class: rviz_default_plugins/Orbit
+      Distance: 6
+      Focal Point: 0; 0; 0
+      Pitch: 0.6
+      Yaw: 0.8
+Window Geometry:
+  Width: 1400
+  Height: 900
+  X: 50
+  Y: 50
+

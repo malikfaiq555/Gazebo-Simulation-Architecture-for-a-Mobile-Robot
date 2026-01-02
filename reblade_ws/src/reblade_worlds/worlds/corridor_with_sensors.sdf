@@ -1,0 +1,102 @@
+<?xml version="1.0" ?>
+<sdf version="1.8">
+  <world name="corridor">
+
+    <plugin filename="gz-sim-physics-system" name="gz::sim::systems::Physics"/>
+    <plugin filename="gz-sim-user-commands-system" name="gz::sim::systems::UserCommands"/>
+    <plugin filename="gz-sim-scene-broadcaster-system" name="gz::sim::systems::SceneBroadcaster"/>
+    <plugin filename="gz-sim-sensors-system" name="gz::sim::systems::Sensors"/>
+
+    <physics name="default" type="ignored">
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1.0</real_time_factor>
+    </physics>
+
+    <light name="sun" type="directional">
+      <pose>0 0 10 0 0 0</pose>
+      <cast_shadows>true</cast_shadows>
+      <diffuse>1 1 1 1</diffuse>
+      <direction>-0.2 0.25 -1</direction>
+    </light>
+
+    <!-- Ground -->
+    <model name="ground_plane">
+      <static>true</static>
+      <link name="link">
+        <collision name="collision">
+          <geometry><plane><normal>0 0 1</normal><size>80 30</size></plane></geometry>
+        </collision>
+        <visual name="visual">
+          <geometry><plane><normal>0 0 1</normal><size>80 30</size></plane></geometry>
+          <material><ambient>0.90 0.90 0.86 1</ambient><diffuse>0.90 0.90 0.86 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Corridor walls: long + colored -->
+    <!-- Corridor along X; width ~2.2m -->
+    <model name="wall_left">
+      <static>true</static>
+      <pose>12 1.1 0.6 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>24 0.12 1.2</size></box></geometry></collision>
+        <visual name="v">
+          <geometry><box><size>24 0.12 1.2</size></box></geometry>
+          <material><ambient>0.25 0.25 0.25 1</ambient><diffuse>0.25 0.25 0.25 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+
+    <model name="wall_right">
+      <static>true</static>
+      <pose>12 -1.1 0.6 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>24 0.12 1.2</size></box></geometry></collision>
+        <visual name="v">
+          <geometry><box><size>24 0.12 1.2</size></box></geometry>
+          <material><ambient>0.25 0.25 0.25 1</ambient><diffuse>0.25 0.25 0.25 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- End wall (goal area) -->
+    <model name="end_wall">
+      <static>true</static>
+      <pose>24 0 0.6 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.12 2.4 1.2</size></box></geometry></collision>
+        <visual name="v">
+          <geometry><box><size>0.12 2.4 1.2</size></box></geometry>
+          <material><ambient>0.8 0.6 0.2 1</ambient><diffuse>0.8 0.6 0.2 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- A few “gates” to force steering -->
+    <model name="gate1">
+      <static>true</static>
+      <pose>8 0.5 0.3 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.6 0.3 0.6</size></box></geometry></collision>
+        <visual name="v">
+          <geometry><box><size>0.6 0.3 0.6</size></box></geometry>
+          <material><ambient>0.9 0.2 0.2 1</ambient><diffuse>0.9 0.2 0.2 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+
+    <model name="gate2">
+      <static>true</static>
+      <pose>14 -0.5 0.3 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.6 0.3 0.6</size></box></geometry></collision>
+        <visual name="v">
+          <geometry><box><size>0.6 0.3 0.6</size></box></geometry>
+          <material><ambient>0.2 0.9 0.3 1</ambient><diffuse>0.2 0.9 0.3 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+
+  </world>
+</sdf>
+

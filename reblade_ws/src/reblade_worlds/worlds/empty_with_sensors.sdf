@@ -1,0 +1,74 @@
+<?xml version="1.0" ?>
+<sdf version="1.8">
+  <world name="empty">
+
+    <!-- Systems -->
+    <plugin filename="gz-sim-physics-system" name="gz::sim::systems::Physics"/>
+    <plugin filename="gz-sim-user-commands-system" name="gz::sim::systems::UserCommands"/>
+    <plugin filename="gz-sim-scene-broadcaster-system" name="gz::sim::systems::SceneBroadcaster"/>
+    <plugin filename="gz-sim-sensors-system" name="gz::sim::systems::Sensors"/>
+
+    <!-- Physics: stable + less tunneling -->
+    <physics name="default" type="ignored">
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1.0</real_time_factor>
+    </physics>
+
+    <!-- Lighting -->
+    <light name="sun" type="directional">
+      <pose>0 0 10 0 0 0</pose>
+      <cast_shadows>true</cast_shadows>
+      <diffuse>1 1 1 1</diffuse>
+      <specular>0.2 0.2 0.2 1</specular>
+      <direction>-0.3 0.3 -1</direction>
+    </light>
+
+    <!-- Ground plane (not black) -->
+    <model name="ground_plane">
+      <static>true</static>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <plane><normal>0 0 1</normal><size>60 60</size></plane>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <plane><normal>0 0 1</normal><size>60 60</size></plane>
+          </geometry>
+          <material>
+            <ambient>0.88 0.88 0.90 1</ambient>
+            <diffuse>0.88 0.88 0.90 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- A couple of colored “landmarks” for easy screenshots -->
+    <model name="landmark_red">
+      <static>true</static>
+      <pose>2 2 0.25 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><box><size>0.4 0.4 0.5</size></box></geometry></collision>
+        <visual name="v">
+          <geometry><box><size>0.4 0.4 0.5</size></box></geometry>
+          <material><ambient>0.9 0.2 0.2 1</ambient><diffuse>0.9 0.2 0.2 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+
+    <model name="landmark_blue">
+      <static>true</static>
+      <pose>-2 -1.5 0.35 0 0 0</pose>
+      <link name="link">
+        <collision name="c"><geometry><cylinder><radius>0.25</radius><length>0.7</length></cylinder></geometry></collision>
+        <visual name="v">
+          <geometry><cylinder><radius>0.25</radius><length>0.7</length></cylinder></geometry>
+          <material><ambient>0.2 0.4 0.95 1</ambient><diffuse>0.2 0.4 0.95 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+
+  </world>
+</sdf>
+
