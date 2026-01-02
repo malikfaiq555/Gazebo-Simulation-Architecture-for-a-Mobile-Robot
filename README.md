@@ -1,38 +1,4 @@
-Alright — here’s a **ready-to-paste GitHub repo scaffold**: project structure, README (with launch commands, Mermaid diagram, demo video/GIF embedding), plus a solid `.gitignore`. You can copy these files directly.
 
----
-
-## 1) Recommended repo layout
-
-At the repo root (top-level), keep it clean:
-
-```
-reblade-sim/
-├── reblade_ws/                 # your ROS 2 workspace (recommended to keep)
-│   ├── src/
-│   │   ├── reblade_bot_description/
-│   │   ├── reblade_bot_bringup/
-│   │   ├── reblade_worlds/
-│   │   ├── reblade_tools/
-│   │   └── reblade_navigation/
-│   └── (optional) install/ build/ log/  <-- do NOT commit
-├── docs/
-│   └── Reblade_Simulation_Architecture.pdf
-├── media/
-│   ├── demo.mp4
-│   └── demo.gif
-├── README.md
-├── LICENSE   (optional)
-└── .gitignore
-```
-
-> If your submission guidelines prefer only `src/` instead of full workspace, you can move `reblade_ws/src` to root. But with time pressure, keeping `reblade_ws/` is fine as long as you don’t commit build artifacts.
-
----
-
-## 2) README.md (copy/paste)
-
-````markdown
 # REBLADE — ROS 2 + Gazebo Harmonic Mobile Robot Simulation
 
 This repository contains a ROS 2 (Humble) simulation architecture built on Gazebo Harmonic (gz-sim) for a differential-drive mobile robot with LiDAR + camera sensors, multiple test worlds, and a lightweight goal-driven reactive navigation demo.
@@ -94,24 +60,26 @@ reblade_ws/src/
 ├── reblade_worlds/              # SDF worlds (empty/corridor/obstacles)
 ├── reblade_tools/               # helper + navigation nodes
 └── reblade_navigation/          # reserved for future Nav2/SLAM
-docs/
-└── Reblade_Simulation_Architecture.pdf
-media/
-├── demo.mp4
-└── demo.gif
+
 ```
 
 ---
 
 ## Demo
 
-### Video
+The following short demonstrations show the simulation running in Gazebo and RViz.
 
-* `media/demo.mp4`
+### Demo 1 — Obstacle Avoidance (Gazebo + RViz)
+This demo shows the robot navigating through the obstacle-rich environment using goal-driven reactive avoidance.
 
-### Preview GIF
+![Demo 1](media/1.gif)
 
-![Demo](media/demo.gif)
+---
+
+### Demo 2 — Corridor Navigation
+This demo shows the robot navigating through a constrained corridor environment, demonstrating stable steering and clearance handling.
+
+![Demo 2](media/2.gif)
 
 ---
 
@@ -194,15 +162,7 @@ Observed (typical):
 
 The current simulation uses Gazebo DiffDrive for motion. The architecture is intentionally compatible with a future `ros2_control` integration (e.g., `diff_drive_controller` + `joint_state_broadcaster` + simulated hardware interface), which would replace the DiffDrive system plugin in a production setup.
 
----
 
-## Documentation
-
-The detailed architecture write-up and results are provided in:
-
-* `docs/Reblade_Simulation_Architecture.pdf`
-
-````
 
 
 
