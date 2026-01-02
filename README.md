@@ -69,15 +69,15 @@ reblade_ws/src/
 
 The following short demonstrations show the simulation running in Gazebo and RViz.
 
-### Demo 1 — Obstacle Avoidance (Gazebo + RViz)
+### Demo 1 moving towards a goal
 This demo shows the robot navigating through the obstacle-rich environment using goal-driven reactive avoidance.
 
 ![Demo 1](media/1.gif)
 
 ---
 
-### Demo 2 — Corridor Navigation
-This demo shows the robot navigating through a constrained corridor environment, demonstrating stable steering and clearance handling.
+### Demo 2 — coming back to starting position
+This demo shows the robot navigating back to its original position, demonstrating stable steering and clearance handling.
 
 ![Demo 2](media/2.gif)
 
