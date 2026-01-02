@@ -1,0 +1,262 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="reblade_bot">
+
+  <!-- =========================
+       Parameters
+  ========================== -->
+  <!-- Chassis -->
+  <xacro:property name="base_length" value="0.38"/>
+  <xacro:property name="base_width"  value="0.26"/>
+  <xacro:property name="base_height" value="0.10"/>
+  <xacro:property name="base_mass"   value="20.0"/>
+
+  <!-- Wheels -->
+  <xacro:property name="wheel_radius" value="0.06"/>
+  <xacro:property name="wheel_width"  value="0.03"/>
+  <xacro:property name="wheel_mass"   value="1.0"/>
+  <xacro:property name="wheel_sep"    value="0.22"/>
+  <xacro:property name="wheel_x"      value="0.00"/>
+
+  <!-- Clearance (makes chassis float above ground) -->
+  <xacro:property name="ground_clearance" value="0.02"/>
+
+  <!-- Caster -->
+  <xacro:property name="caster_radius" value="0.025"/>
+  <xacro:property name="caster_mass"   value="0.3"/>
+  <xacro:property name="caster_x"      value="0.15"/>
+
+  <!-- Mast + deck -->
+  <xacro:property name="mast_height"    value="0.18"/>
+  <xacro:property name="mast_radius"    value="0.015"/>
+  <xacro:property name="mast_x"         value="0.12"/>
+  <xacro:property name="deck_thickness" value="0.01"/>
+  <xacro:property name="deck_size_x"    value="0.18"/>
+  <xacro:property name="deck_size_y"    value="0.14"/>
+
+  <!-- =========================
+       base_link (center of chassis box)
+  ========================== -->
+  <link name="base_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><box size="${base_length} ${base_width} ${base_height}"/></geometry>
+      <material name="chassis_gray"><color rgba="0.55 0.55 0.55 1.0"/></material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><box size="${base_length} ${base_width} ${base_height}"/></geometry>
+    </collision>
+    <inertial>
+      <!-- Lower COM for stability -->
+      <origin xyz="0 0 ${-base_height*0.15}" rpy="0 0 0"/>
+      <mass value="${base_mass}"/>
+      <inertia ixx="0.35" ixy="0" ixz="0" iyy="0.50" iyz="0" izz="0.60"/>
+    </inertial>
+  </link>
+
+  <!-- =========================
+       Wheels (FIXED joints for RViz baseline)
+       Note: Robot still moves in Gazebo via diff-drive plugin,
+             but wheels won't rotate visually (acceptable baseline).
+  ========================== -->
+  <xacro:macro name="wheel_link" params="name">
+    <link name="${name}">
+      <visual>
+        <origin xyz="0 0 0" rpy="1.5708 0 0"/>
+        <geometry><cylinder radius="${wheel_radius}" length="${wheel_width}"/></geometry>
+        <material name="wheel_black"><color rgba="0.08 0.08 0.08 1.0"/></material>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="1.5708 0 0"/>
+        <geometry><cylinder radius="${wheel_radius}" length="${wheel_width}"/></geometry>
+      </collision>
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <mass value="${wheel_mass}"/>
+        <inertia ixx="0.003" ixy="0" ixz="0" iyy="0.003" iyz="0" izz="0.003"/>
+      </inertial>
+    </link>
+  </xacro:macro>
+
+  <xacro:wheel_link name="left_wheel_link"/>
+  <xacro:wheel_link name="right_wheel_link"/>
+
+  <!-- Place wheels using joint origin; axle lowered with clearance -->
+  <joint name="left_wheel_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="left_wheel_link"/>
+    <origin xyz="${wheel_x} ${wheel_sep/2} ${-base_height/2 + wheel_radius - ground_clearance}" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+  </joint>
+
+  <joint name="right_wheel_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="right_wheel_link"/>
+    <origin xyz="${wheel_x} ${-wheel_sep/2} ${-base_height/2 + wheel_radius - ground_clearance}" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+  </joint>
+
+  <!-- =========================
+       Front caster (sphere)
+  ========================== -->
+  <link name="caster_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><sphere radius="${caster_radius}"/></geometry>
+      <material name="caster_blue"><color rgba="0.20 0.40 0.90 1.0"/></material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><sphere radius="${caster_radius}"/></geometry>
+    </collision>
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="${caster_mass}"/>
+      <inertia ixx="0.0002" ixy="0" ixz="0" iyy="0.0002" iyz="0" izz="0.0002"/>
+    </inertial>
+  </link>
+
+  <joint name="caster_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="caster_link"/>
+    <origin xyz="${caster_x} 0 ${-base_height/2 + caster_radius - ground_clearance}" rpy="0 0 0"/>
+  </joint>
+
+  <!-- =========================
+       Mast + sensor deck
+  ========================== -->
+  <link name="mast_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><cylinder radius="${mast_radius}" length="${mast_height}"/></geometry>
+      <material name="mast_orange"><color rgba="1.00 0.55 0.00 1.0"/></material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><cylinder radius="${mast_radius}" length="${mast_height}"/></geometry>
+    </collision>
+  </link>
+
+  <joint name="mast_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="mast_link"/>
+    <origin xyz="${mast_x} 0 ${base_height/2 + mast_height/2}" rpy="0 0 0"/>
+  </joint>
+
+  <link name="sensor_deck_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><box size="${deck_size_x} ${deck_size_y} ${deck_thickness}"/></geometry>
+      <material name="deck_white"><color rgba="0.95 0.95 0.95 1.0"/></material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><box size="${deck_size_x} ${deck_size_y} ${deck_thickness}"/></geometry>
+    </collision>
+  </link>
+
+  <joint name="sensor_deck_joint" type="fixed">
+    <parent link="mast_link"/>
+    <child link="sensor_deck_link"/>
+    <origin xyz="0 0 ${mast_height/2 + deck_thickness/2}" rpy="0 0 0"/>
+  </joint>
+
+  <!-- =========================
+       Lidar + Camera
+  ========================== -->
+  <link name="lidar_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><cylinder radius="0.035" length="0.03"/></geometry>
+      <material name="lidar_green"><color rgba="0.20 0.90 0.30 1.0"/></material>
+    </visual>
+  </link>
+
+  <joint name="lidar_joint" type="fixed">
+    <parent link="sensor_deck_link"/>
+    <child link="lidar_link"/>
+    <origin xyz="0.03 0 0.03" rpy="0 0 0"/>
+  </joint>
+
+  <link name="camera_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><box size="0.05 0.04 0.03"/></geometry>
+      <material name="camera_red"><color rgba="0.90 0.20 0.20 1.0"/></material>
+    </visual>
+  </link>
+
+  <joint name="camera_joint" type="fixed">
+    <parent link="sensor_deck_link"/>
+    <child link="camera_link"/>
+    <origin xyz="0.08 0 0.05" rpy="0 0 0"/>
+  </joint>
+
+  <link name="camera_optical_frame"/>
+  <joint name="camera_optical_joint" type="fixed">
+    <parent link="camera_link"/>
+    <child link="camera_optical_frame"/>
+    <origin xyz="0 0 0" rpy="-1.5708 0 -1.5708"/>
+  </joint>
+
+  <!-- =========================
+       Gazebo Harmonic / gz-sim plugins
+  ========================== -->
+  <gazebo>
+    <plugin filename="gz-sim-diff-drive-system" name="gz::sim::systems::DiffDrive">
+      <left_joint>left_wheel_joint</left_joint>
+      <right_joint>right_wheel_joint</right_joint>
+      <wheel_separation>${wheel_sep}</wheel_separation>
+      <wheel_radius>${wheel_radius}</wheel_radius>
+      <topic>/cmd_vel</topic>
+      <odom_topic>/odom</odom_topic>
+      <odom_frame>odom</odom_frame>
+      <base_frame>base_link</base_frame>
+      <update_rate>50</update_rate>
+    </plugin>
+  </gazebo>
+
+<gazebo reference="lidar_link">
+  <sensor name="lidar" type="gpu_lidar">
+    <update_rate>10</update_rate>
+    <topic>/scan</topic>
+    <ray>
+      <scan>
+        <horizontal>
+          <samples>720</samples>
+          <min_angle>-1.5708</min_angle>
+          <max_angle>1.5708</max_angle>
+        </horizontal>
+      </scan>
+      <range>
+        <min>0.12</min>
+        <max>8.0</max>
+        <resolution>0.01</resolution>
+      </range>
+    </ray>
+  </sensor>
+</gazebo>
+
+  <gazebo reference="camera_link">
+    <sensor name="camera" type="camera">
+      <update_rate>20</update_rate>
+      <topic>/camera/image_raw</topic>
+      <camera>
+        <horizontal_fov>1.047</horizontal_fov>
+        <image>
+          <width>640</width>
+          <height>480</height>
+          <format>R8G8B8</format>
+        </image>
+        <clip><near>0.05</near><far>50</far></clip>
+      </camera>
+    </sensor>
+  </gazebo>
+
+  <!-- Friction hints -->
+  <gazebo reference="left_wheel_link"><mu1>3.0</mu1><mu2>3.0</mu2></gazebo>
+  <gazebo reference="right_wheel_link"><mu1>3.0</mu1><mu2>3.0</mu2></gazebo>
+  <gazebo reference="caster_link"><mu1>1.2</mu1><mu2>1.2</mu2></gazebo>
+
+</robot>
+
